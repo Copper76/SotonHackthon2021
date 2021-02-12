@@ -2,12 +2,15 @@ import bs4
 import urllib.request
 import re
 
+MAX_SEASONS = 24
+MAX_EPISODES = 30
+
 base = "http://www.chakoteya.net/DoctorWho/"
 
 scripts = ""
 
-for i in range(1,25):
-    for j in range(1,8):
+for i in range(1, MAX_SEASONS + 1):
+    for j in range(1, MAX_EPISODES + 1):
 
         print("Processing season {} episode {}".format(i, j))
 
