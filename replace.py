@@ -1,5 +1,6 @@
 import math
 
+
 def calc_dist(string1, string2):
     val = 0
     if string1 == "":
@@ -27,29 +28,33 @@ def calc_dist_bool(string1, string2, threshhold):
              calc_dist(string1[1:], string2[1:])]) < threshhold
 
 
-def rep_words(inputString, keyword_list, threshold):
+def rep_words(inputString, keywords, threshold):
     final = ""
     words = inputString.split()
-    keywords = keyword_list.split(",")
     for word in words:
+        insert = word
         for keyword in keywords:
             if calc_dist(word.lower(), keyword.lower()) < threshold:
-                final += " " + keyword
-            else:
-                final += " " + word
+                insert = keyword
+                break
+        final += " " + insert
     return final
+
 
 def rep_words_flex(inputString, keywords):
     final = ""
     words = inputString.split()
     for word in words:
+        insert = word
         for keyword in keywords:
-            threshold = math.floor(len(keyword)/4)
-            print(threshold)
+            threshold = math.floor(len(keyword) / 4)
             if calc_dist(word.lower(), keyword.lower()) < threshold:
-                final += " " + keyword
-            else:
-                final += " " + word
+                insert = keyword
+                break
+        final += " " + insert
     return final
 
-print(rep_words_flex("Cyberman cybermain cybermonkey cybercat cyberdalek monkeydalek is Doctor wholiak", "Cyberman"))
+with open("keywords.txt") as myfile:
+    keywords = myfile.readlines()
+
+print(rep_words_flex("Cyberman cybermain cybermonkey cybercat cyberdalek monkeydalek is Doctor wholiak", keywords))
