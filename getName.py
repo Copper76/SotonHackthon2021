@@ -8,8 +8,9 @@ with open(filepath) as myfile:
         if words:
             if words[0][-1] == ":":
                 keywords.append(line.split()[0][:-1])
-    keywords = str(set(keywords))
+    keywords = list(set(keywords))
 
 f = open(filewrite, 'w')
-f.write(keywords)
+for keyword in keywords:
+    f.write(keyword+"\n")
 f.close()

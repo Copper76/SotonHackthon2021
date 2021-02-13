@@ -39,10 +39,9 @@ def rep_words(inputString, keyword_list, threshold):
                 final += " " + word
     return final
 
-def rep_words_flex(inputString, keyword_list):
+def rep_words_flex(inputString, keywords):
     final = ""
     words = inputString.split()
-    keywords = keyword_list.split(",")
     for word in words:
         for keyword in keywords:
             threshold = math.floor(len(keyword)/4)
