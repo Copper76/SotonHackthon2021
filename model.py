@@ -10,7 +10,7 @@ path = "./dwscripts.txt"
 # Read file and strip new lines
 with io.open(path, encoding="utf-8") as f:
     text = f.read().lower()
-text = text.replace("\n", " ")
+#text = text.replace("\n", " ")
 
 print("Corpus length: ", len(text))
 
