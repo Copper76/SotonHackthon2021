@@ -3,6 +3,10 @@ from tensorflow.keras.models import load_model
 
 import numpy as np
 
+maxlen = 40
+temperature = 0.5
+gen_length = 4000
+
 model = load_model("./trained_model.h5")
 
 optimizer = keras.optimizers.RMSprop(learning_rate=0.001)
@@ -23,18 +27,21 @@ path = "./dwscripts.txt"
 with io.open(path, encoding="utf-8") as f:
     text = f.read().lower()
 
+bad = ["[","]","(",")",".","!","?",","]
+for b in bad:
+    text = text.replace(b, "")
+
+
 chars = sorted(list(set(text)))
 char_indices = dict((c, i) for i, c in enumerate(chars))
 indices_char = dict((i, c) for i, c in enumerate(chars))
 
-maxlen = 40
-temperature = 0.5
 
 # Take a seed
 sentence = input("Enter seed: ")[:maxlen]
 
 generated = ""
-for i in range (400):
+for i in range (gen_length):
 
     # Vectorize the seed
     x_pred = np.zeros((1, maxlen, len(chars)))
@@ -47,6 +54,7 @@ for i in range (400):
     next_char = indices_char[next_index]
 
     sentence = sentence[1:] + next_char
+    print(next_char, end='')
     generated += next_char
 
 # Match and replace keywords by edit distance

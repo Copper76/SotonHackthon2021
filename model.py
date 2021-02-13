@@ -12,6 +12,10 @@ with io.open(path, encoding="utf-8") as f:
     text = f.read().lower()
 #text = text.replace("\n", " ")
 
+bad = ["[","]","(",")",".","!","?",","]
+for b in bad:
+    text = text.replace(b, "")
+
 print("Corpus length: ", len(text))
 
 # Unique characters in corpus
@@ -70,7 +74,7 @@ model = keras.Sequential(
 # )
 # model.summary()
 
-optimizer = keras.optimizers.RMSprop(learning_rate=0.001)
+optimizer = keras.optimizers.RMSprop(learning_rate=0.0008)
 model.compile(loss="categorical_crossentropy", optimizer=optimizer)
 
 # Reweights distribution using temeperature and samples index from probability array
@@ -82,7 +86,7 @@ def sample(preds, temperature=1.0):
     probas = np.random.multinomial(1, preds, 1)
     return np.argmax(probas)
 
-epochs = 10
+epochs = 60
 batch_size = 64
 
 for epoch in range(epochs):
@@ -92,36 +96,38 @@ for epoch in range(epochs):
 
     print("Generating text after epoch: %d" % epoch)
 
+    model.save("trained_model.h5")
+
     # Select a text seed at random
     start_index = random.randint(0, len(text) - maxlen - 1)
 
     # Attempt generation with a range of temperatures
-    for diversity in [0.2, 0.5, 1.0, 1.2]:
+    # for diversity in [0.2, 0.5, 1.0, 1.2]:
 
-        print("...Diversity:", diversity)
+    #     print("...Diversity:", diversity)
 
-        generated = ""
-        sentence = text[start_index : start_index + maxlen]
-        print('...Generating with seed: "' + sentence + '"')
+    #     generated = ""
+    #     sentence = text[start_index : start_index + maxlen]
+    #     print('...Generating with seed: "' + sentence + '"')
 
-        # Generate N characters starting from the seed text
-        for i in range(400):
+    #     # Generate N characters starting from the seed text
+    #     for i in range(400):
 
-            # Vectorize characters generated
-            x_pred = np.zeros((1, maxlen, len(chars)))
-            for t, char in enumerate(sentence):
-                x_pred[0, t, char_indices[char]] = 1.0
+    #         # Vectorize characters generated
+    #         x_pred = np.zeros((1, maxlen, len(chars)))
+    #         for t, char in enumerate(sentence):
+    #             x_pred[0, t, char_indices[char]] = 1.0
 
-            # Predict next character
-            preds = model.predict(x_pred, verbose=0)[0]
-            next_index = sample(preds, diversity)
-            next_char = indices_char[next_index]
+    #         # Predict next character
+    #         preds = model.predict(x_pred, verbose=0)[0]
+    #         next_index = sample(preds, diversity)
+    #         next_char = indices_char[next_index]
 
-            # Build generated sentence
-            sentence = sentence[1:] + next_char
-            generated += next_char
+    #         # Build generated sentence
+    #         sentence = sentence[1:] + next_char
+    #         generated += next_char
 
-        print("...Generated: ", generated)
-        print()
+    #     print("...Generated: ", generated)
+    #     print()
 
 model.save("trained_model.h5")
