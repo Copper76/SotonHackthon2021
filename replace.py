@@ -29,8 +29,10 @@ def rep_words(inputString, keyword_list, threshold):
     keywords = keyword_list.split(",")
     for word in words:
         for keyword in keywords:
-            if calc_dist(word, keyword) < threshold:
+            if calc_dist(word.lower(), keyword.lower()) < threshold:
                 final += " " + keyword
             else:
                 final += " " + word
     return final
+
+print(rep_words("Cyberman cybermain cybermonkey"))
