@@ -49,7 +49,7 @@ for i, sentence in enumerate(sentences):
     y[i, char_indices[next_chars[i]]] = 1
 
 
-# Make the model
+# Build the model
 model = keras.Sequential(
     [
         keras.Input(shape=(maxlen, len(chars))),
@@ -73,25 +73,38 @@ epochs = 40
 batch_size = 128
 
 for epoch in range(epochs):
+
+    # Fit model for a single iteration
     model.fit(x, y, batch_size=batch_size, epochs=1)
-    print()
+
     print("Generating text after epoch: %d" % epoch)
 
+    # Select a text seed at random
     start_index = random.randint(0, len(text) - maxlen - 1)
+
+    # Attempt generation with a range of temperatures
     for diversity in [0.2, 0.5, 1.0, 1.2]:
+
         print("...Diversity:", diversity)
 
         generated = ""
         sentence = text[start_index : start_index + maxlen]
         print('...Generating with seed: "' + sentence + '"')
 
+        # Generate N characters starting from the seed text
         for i in range(400):
+
+            # Vectorize characters generated
             x_pred = np.zeros((1, maxlen, len(chars)))
             for t, char in enumerate(sentence):
                 x_pred[0, t, char_indices[char]] = 1.0
+
+            # Predict next character
             preds = model.predict(x_pred, verbose=0)[0]
             next_index = sample(preds, diversity)
             next_char = indices_char[next_index]
+
+            # Build generated sentence
             sentence = sentence[1:] + next_char
             generated += next_char
 
