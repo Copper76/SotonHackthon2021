@@ -82,7 +82,7 @@ def sample(preds, temperature=1.0):
     probas = np.random.multinomial(1, preds, 1)
     return np.argmax(probas)
 
-epochs = 20
+epochs = 10
 batch_size = 64
 
 for epoch in range(epochs):
@@ -124,4 +124,4 @@ for epoch in range(epochs):
         print("...Generated: ", generated)
         print()
 
-model.save()
+model.save("trained_model.h5")
