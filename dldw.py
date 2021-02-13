@@ -28,7 +28,7 @@ for i in range(1, MAX_SEASONS + 1):
             break
 
         # Strip carriage returns and shit
-        text = soup.replace("\\r\\n", " ").replace("\\","")
+        text = soup.replace("\\r\\n", "\n").replace("\\","")
 
         scripts += text
 
