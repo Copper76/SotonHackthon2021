@@ -21,14 +21,15 @@ for i in range(1, MAX_SEASONS + 1):
         # Open page and extract body text
         try:
             webpage = str(urllib.request.urlopen(link).read())
-            soup = bs4.BeautifulSoup(webpage)
+            soup = bs4.BeautifulSoup(webpage, features="html.parser")
             soup = soup.tbody.text
+
         except:
             # Skip to next if season doesn't exist
             break
 
         # Strip carriage returns and shit
-        text = soup.replace("\\r\\n", "\n").replace("\\","")
+        text = soup.replace("\\r\\n", "\n").replace("\\n","\n").replace("\\","")
 
         scripts += text
 
