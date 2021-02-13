@@ -1,19 +1,15 @@
-filepath = 'dwscripts.txt';
-filewrite = './keywords.txt';
-words = [];
+filepath = 'dwscripts.txt'
+filewrite = './keywords.txt'
+keywords = []
 with open(filepath) as myfile:
-   line = myfile.read()
-   strings = line.split(":")[:-1];
+    lines = myfile.readlines()
+    for line in lines:
+        words = line.split()
+        if words:
+            if words[0][-1] == ":":
+                keywords.append(line.split()[0][:-1])
+    keywords = str(set(keywords))
 
-   for string in strings:
-        try:
-            words.append(string.split()[-1]);
-        except:
-            print(string);
-wordlist = str(list(set(words)));
-print(wordlist)
-
-
-f = open(filewrite, 'w');
-f.write(wordlist);
-f.close();
+f = open(filewrite, 'w')
+f.write(keywords)
+f.close()
