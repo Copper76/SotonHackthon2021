@@ -53,24 +53,37 @@ for i, sentence in enumerate(sentences):
 model = keras.Sequential(
     [
         keras.Input(shape=(maxlen, len(chars))),
-        layers.LSTM(128),
+        layers.LSTM(64),
         layers.Dense(len(chars), activation="softmax"),
     ]
 )
-optimizer = keras.optimizers.RMSprop(learning_rate=0.01)
+
+# model = keras.Sequential(
+#     [
+#         keras.Input(shape=(maxlen, len(chars))),
+#         layers.LSTM(256),
+#         layers.Dropout(0.2),
+#         layers.LSTM(256),
+#         layers.Dropout(0.2),
+#         layers.Dense(len(chars), activation="softmax")
+#     ]
+# )
+# model.summary()
+
+optimizer = keras.optimizers.RMSprop(learning_rate=0.001)
 model.compile(loss="categorical_crossentropy", optimizer=optimizer)
 
 # Reweights distribution using temeperature and samples index from probability array
 def sample(preds, temperature=1.0):
     preds = np.asarray(preds).astype("float64")
-    preds = np.log(preds) / temperature
+    preds = np.log(preds) / (temperature)
     exp_preds = np.exp(preds)
     preds = exp_preds / np.sum(exp_preds)
     probas = np.random.multinomial(1, preds, 1)
     return np.argmax(probas)
 
-epochs = 40
-batch_size = 128
+epochs = 20
+batch_size = 64
 
 for epoch in range(epochs):
 
@@ -111,3 +124,4 @@ for epoch in range(epochs):
         print("...Generated: ", generated)
         print()
 
+model.save()
