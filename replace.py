@@ -48,13 +48,13 @@ def rep_words_flex(inputString, keywords):
         insert = word
         for keyword in keywords:
             threshold = math.floor(len(keyword) / 4)
-            if calc_dist(word.lower(), keyword.lower()) < threshold:
+            if calc_dist(word.lower(), keyword.lower()) <= threshold:
                 insert = keyword
                 break
         final += " " + insert
     return final
 
 with open("keywords.txt") as myfile:
-    keywords = myfile.readlines()
+    keywords = myfile.read().splitlines()
 
 print(rep_words_flex("Cyberman cybermain cybermonkey cybercat cyberdalek monkeydalek is Doctor wholiak", keywords))
